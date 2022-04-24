@@ -53,6 +53,15 @@ a {
   text-decoration: none;
   color: inherit;
 }
+button {
+	all: unset;
+}
+body {
+	font-size: 14px;
+	@media only screen and (max-width: 1023px) {
+		font-size: .85vw;
+	}
+}
 `;
 
 const root = ReactDOM.createRoot(

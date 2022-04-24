@@ -4,14 +4,16 @@ import Series from "./Routes/Series";
 import Movie from "./Routes/Movie";
 import Latest from "./Routes/Latest";
 import MyList from "./Routes/my-list";
+import Header from "./components/Header";
 
 function Router() {
 	return (
 		<BrowserRouter>
+			<Header />
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/series" element={<Series />} />
-				<Route path="/movie" element={<Movie />} />
+				<Route path="/movies" element={<Movie />} />
 				<Route path="/latest" element={<Latest />} />
 				<Route path="/my-list" element={<MyList />} />
 			</Routes>
