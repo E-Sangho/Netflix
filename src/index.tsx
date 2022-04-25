@@ -61,6 +61,8 @@ body {
 	@media only screen and (max-width: 1023px) {
 		font-size: .85vw;
 	}
+	height: 1000vh;
+	background-color: rgb(20, 20, 20);
 }
 `;
 
