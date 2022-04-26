@@ -23,16 +23,11 @@ const MenuIcon = styled.button`
 	}
 `;
 
-interface IDropDown {
-	$visible: boolean;
-}
-
-const DropDown = styled.div<IDropDown>`
+const DropDown = styled.div`
 	width: 240px;
 	position: absolute;
 	top: 41px;
 	left: -72px;
-	display: ${(props) => (props.$visible ? "block" : "none")};
 	background-color: rgb(20, 20, 20);
 	border: 1px solid rgb(50, 50, 50);
 	border-top: 3px solid white;
@@ -52,29 +47,28 @@ const DropDown = styled.div<IDropDown>`
 			align-items: center;
 		}
 	}
-	background-color: red;
 `;
 
 function Menu() {
+	let enterDelay = 200,
+		leaveDelay = 200;
+	let mouseEnterTimer: NodeJS.Timeout, mouseLeaveTimer: NodeJS.Timeout;
 	const [menuOpened, setMenuOpened] = useRecoilState(menuAtom);
-	const [mouseEnter, setMouseEnter] = useState(false);
-	const menuRef = useRef<HTMLButtonElement | null>(null);
+	const menuRef = useRef<HTMLDivElement | null>(null);
 	const menuClicked = () => {
 		setMenuOpened((prev) => !prev);
 	};
-	const onMouseEnter = () => {
-		console.log("mouse Enter");
-		setMouseEnter(true);
-		setMenuOpened(true);
+	const mouseEnterHandler = () => {
+		clearTimeout(mouseLeaveTimer);
+		mouseEnterTimer = setTimeout(() => {
+			setMenuOpened(true);
+		}, enterDelay);
 	};
-	const onMouseLeave = () => {
-		console.log("mouse Leave");
-		setTimeout(() => {
-			if (mouseEnter === false) {
-				setMouseEnter(false);
-				setMenuOpened(false);
-			}
-		}, 200);
+	const mouseLeaveHandler = () => {
+		clearTimeout(mouseEnterTimer);
+		mouseLeaveTimer = setTimeout(() => {
+			setMenuOpened(false);
+		}, leaveDelay);
 	};
 	useEffect(() => {
 		const handler = (event: any) => {
@@ -87,15 +81,17 @@ function Menu() {
 			}
 		};
 		document.addEventListener("mousedown", handler);
-		document.addEventListener("touchstart", handler);
 		return () => {
 			document.removeEventListener("mousedown", handler);
-			document.removeEventListener("touchstart", handler);
 		};
-	}, [menuOpened, mouseEnter]);
+	}, [menuOpened]);
 	return (
-		<div onMouseOver={onMouseEnter} onMouseOut={onMouseLeave}>
-			<MenuIcon ref={menuRef} onClick={menuClicked}>
+		<div
+			ref={menuRef}
+			onMouseEnter={mouseEnterHandler}
+			onMouseLeave={mouseLeaveHandler}
+		>
+			<MenuIcon onClick={menuClicked}>
 				Menu
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -106,13 +102,11 @@ function Menu() {
 					<path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
 				</svg>
 			</MenuIcon>
-			<DropDown
-				onMouseOver={onMouseEnter}
-				onMouseOut={onMouseLeave}
-				$visible={menuOpened || mouseEnter}
-			>
-				<Navigation />
-			</DropDown>
+			{menuOpened ? (
+				<DropDown>
+					<Navigation />
+				</DropDown>
+			) : null}
 		</div>
 	);
 }

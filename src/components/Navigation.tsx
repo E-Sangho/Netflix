@@ -2,10 +2,15 @@ import styled from "styled-components";
 import { Link, useMatch } from "react-router-dom";
 
 const NavLink = styled.li`
+	width: 100%;
 	margin-right: 20px;
 	color: white;
 	@media only screen and (max-width: 767px) {
 		display: none;
+	}
+	a {
+		width: 100%;
+		text-align: center;
 	}
 `;
 
