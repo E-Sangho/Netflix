@@ -1,18 +1,23 @@
 import { useViewportScroll, useAnimation } from "framer-motion";
 import { useEffect } from "react";
-import Logo from "./Logo";
-import Search from "./SearchIcon";
-import Navigation from "./Navigation";
-import User from "./UserIcon";
-import Alarm from "./Alarm";
-import Menu from "./Menu";
 import {
 	Wrapper,
 	StartWrapper,
 	EndWrapper,
 	NavLinkWrapper,
 	NavIconWrapper,
-} from "./styledHeader";
+} from "../components/head/styles/wrapper";
+
+import {
+	HeaderLogo,
+	HeaderDropDown,
+	HeaderMenu,
+	HeaderNavigation,
+	HeaderSearch,
+	HeaderAlarm,
+	HeaderUser,
+} from "../components/head";
+import NetflixLogo from "../assets/logo.svg";
 
 const navVariants = {
 	initial: {
@@ -23,7 +28,7 @@ const navVariants = {
 	},
 };
 
-function Header() {
+export function HeaderContainer() {
 	const { scrollY } = useViewportScroll();
 	const controls = useAnimation();
 	useEffect(() => {
@@ -38,21 +43,24 @@ function Header() {
 	return (
 		<Wrapper variants={navVariants} animate={controls} initial="initial">
 			<StartWrapper>
-				<Logo />
+				<HeaderLogo to={"/"} src={NetflixLogo} />
 				<NavLinkWrapper>
-					<Menu />
-					<Navigation />
+					<HeaderDropDown
+						Icon={<HeaderMenu />}
+						Contents={<HeaderNavigation />}
+					/>
+					<HeaderNavigation />
 				</NavLinkWrapper>
 			</StartWrapper>
 			<EndWrapper>
 				<NavIconWrapper>
-					<Search />
-					<Alarm />
-					<User />
+					<HeaderSearch />
+					<HeaderAlarm />
+					<HeaderUser />
 				</NavIconWrapper>
 			</EndWrapper>
 		</Wrapper>
 	);
 }
 
-export default Header;
+export default HeaderContainer;

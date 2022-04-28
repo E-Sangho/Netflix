@@ -32,21 +32,8 @@ export const NavLinkWrapper = styled.div`
 	}
 	position: relative;
 `;
+
 export const NavIconWrapper = styled.ul`
 	display: flex;
 	align-items: center;
-`;
-
-export const NavIcon = styled.button`
-	height: 20px;
-	margin: 0px 10px;
-	fill: white;
-	@media only screen and (min-width: 768px) and (max-width: 1023px) {
-		width: 15px;
-		height: 20px;
-	}
-	@media only screen and (max-width: 767px) {
-		width: 10px;
-		height: 15px;
-	}
 `;
