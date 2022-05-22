@@ -4,12 +4,12 @@ import Series from "./Routes/Series";
 import Movie from "./Routes/Movie";
 import Latest from "./Routes/Latest";
 import MyList from "./Routes/my-list";
-import HeaderContainer from "./container/header";
+import Header from "./components/header/index";
 
 function Router() {
 	return (
 		<BrowserRouter>
-			<HeaderContainer />
+			<Header />
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/series" element={<Series />} />

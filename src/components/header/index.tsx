@@ -1,5 +1,4 @@
 import {
-	Container,
 	SearchIcon,
 	DropDown,
 	MenuIcon,
@@ -10,13 +9,66 @@ import {
 	NavWrapper,
 	NavLink,
 } from "./styles/component";
-import { IHeader, IHeaderLogo, IDropDown } from "./styles/interface";
+import {
+	Wrapper,
+	StartWrapper,
+	EndWrapper,
+	NavLinkWrapper,
+	NavIconWrapper,
+} from "./styles/wrapper";
+import { IHeaderLogo, IDropDown } from "./styles/interface";
 import { Link, useMatch } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useAnimation, useViewportScroll } from "framer-motion";
+import NetflixLogo from "../../assets/logo.svg";
 
-function Header({ children, ...restProps }: IHeader) {
-	return <Container {...restProps}>{children}</Container>;
+const navVariants = {
+	initial: {
+		backgroundColor: "rgba(0, 0, 0, 0)",
+		backgroundImage:
+			"linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 10%, rgba(0, 0, 0, 0))",
+	},
+	scroll: {
+		backgroundColor: "rgba(20, 20, 20, 1)",
+		transition: {
+			duration: 0.1,
+		},
+	},
+};
+
+export default function Header() {
+	const { scrollY } = useViewportScroll();
+	const controls = useAnimation();
+	useEffect(() => {
+		scrollY.onChange(() => {
+			if (scrollY.get() > 0) {
+				controls.start("scroll");
+			} else {
+				controls.start("initial");
+			}
+		});
+	}, [scrollY]);
+	return (
+		<Wrapper variants={navVariants} animate={controls} initial="initial">
+			<StartWrapper>
+				<HeaderLogo to={"/"} src={NetflixLogo} />
+				<NavLinkWrapper>
+					<HeaderDropDown
+						Icon={<HeaderMenu />}
+						Contents={<HeaderNavigation />}
+					/>
+					<HeaderNavigation />
+				</NavLinkWrapper>
+			</StartWrapper>
+			<EndWrapper>
+				<NavIconWrapper>
+					<HeaderSearch />
+					<HeaderAlarm />
+					<HeaderUser />
+				</NavIconWrapper>
+			</EndWrapper>
+		</Wrapper>
+	);
 }
 
 function HeaderLogo({ to, src }: IHeaderLogo) {
@@ -209,6 +261,7 @@ function HeaderNavigation() {
 		</NavWrapper>
 	);
 }
+
 export {
 	HeaderDropDown,
 	HeaderLogo,

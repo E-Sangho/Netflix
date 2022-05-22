@@ -2,19 +2,6 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { ISearch } from "./interface";
 
-export const Container = styled(motion.div)`
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	background-color: black;
-	height: 68px;
-	position: fixed;
-	@media only screen and (max-width: 1023px) {
-		height: 41px;
-	}
-`;
-
 export const Logo = styled.img`
 	margin-left: 50px;
 	margin-right: 40px;
