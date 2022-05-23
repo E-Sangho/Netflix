@@ -70,7 +70,7 @@ export const DropDown = styled.div`
 	}
 `;
 
-export const SearchIcon = styled(motion.div)<ISearch>`
+export const SearchIcon = styled(motion.form)<ISearch>`
 	display: flex;
 	align-items: center;
 	position: relative;

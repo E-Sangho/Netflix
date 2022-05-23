@@ -17,8 +17,14 @@ import {
 	NavIconWrapper,
 } from "./styles/wrapper";
 import { IHeaderLogo, IDropDown } from "./styles/interface";
-import { Link, useMatch } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { Link, useMatch, useNavigate } from "react-router-dom";
+import {
+	ChangeEventHandler,
+	FormEventHandler,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { motion, useAnimation, useViewportScroll } from "framer-motion";
 import NetflixLogo from "../../assets/logo.svg";
 
@@ -132,17 +138,33 @@ function HeaderDropDown({ Icon, Contents }: IDropDown) {
 }
 
 function HeaderSearch() {
+	const [keyword, setKeyword] = useState("");
+	const [disabled, setDisabled] = useState(false);
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [searching, setSearching] = useState<boolean>(false);
 	const openSearch = () => {
 		searching ? inputRef.current?.blur() : inputRef.current?.focus();
 		setSearching((prev) => !prev);
 	};
+	const navigate = useNavigate();
+	const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+		setDisabled(true);
+		event.preventDefault();
+		navigate(`/search?keyword=${keyword}`);
+		setKeyword("");
+		setDisabled(false);
+	};
+	const inputChange: ChangeEventHandler<HTMLInputElement> = ({
+		target: { value },
+	}) => {
+		setKeyword(value);
+	};
 	return (
 		<SearchIcon
 			$searching={searching}
 			animate={{ width: searching ? "250px" : "auto" }}
 			transition={{ type: "linear" }}
+			onSubmit={onSubmit}
 		>
 			<NavIcon>
 				<motion.svg
@@ -165,6 +187,11 @@ function HeaderSearch() {
 				transition={{ type: "linear" }}
 				key="searchInput"
 				placeholder="제목,사람,장르"
+				required
+				minLength={2}
+				value={keyword}
+				onChange={inputChange}
+				disabled={disabled}
 			/>
 		</SearchIcon>
 	);
@@ -220,14 +247,15 @@ function HeaderNavigation() {
 			</NavLink>
 			<NavLink>
 				<Link
-					to="series"
+					to="tvshows"
 					style={{
 						fontWeight: seriesMatch ? "bold" : "normal",
 					}}
 				>
-					Series
+					TvShows
 				</Link>
 			</NavLink>
+			{/*
 			<NavLink>
 				<Link
 					to="movies"
@@ -258,6 +286,7 @@ function HeaderNavigation() {
 					MyList
 				</Link>
 			</NavLink>
+				*/}
 		</NavWrapper>
 	);
 }

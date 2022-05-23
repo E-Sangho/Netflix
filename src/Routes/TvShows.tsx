@@ -1,14 +1,13 @@
-import { useQuery } from "react-query";
 import {
-	getPopular,
-	getNowPlaying,
-	getTopRatedMovie,
-	getUpcomingMovie,
 	IGetMoviesResult,
+	getOnAirTv,
+	getPopularTv,
+	getTopRatedTv,
 } from "../api";
+import { useQuery } from "react-query";
 import styled from "styled-components";
-import Slider from "../components/slider";
 import Hero from "../components/hero";
+import Slider from "../components/slider";
 import Modal from "../components/modal";
 
 const Container = styled.div`
@@ -24,31 +23,28 @@ const Loader = styled.div`
 `;
 
 const offset = 6;
-
-function Home() {
-	const { data: nowPlaying, isLoading } = useQuery<IGetMoviesResult>(
-		["movies", "nowPlaying"],
-		getNowPlaying
+function TwShows() {
+	const { data: onAir, isLoading } = useQuery<IGetMoviesResult>(
+		["tvshows", "onair"],
+		getOnAirTv
 	);
 	const { data: popular, isLoading: popularLoading } =
-		useQuery<IGetMoviesResult>(["movies", "popular"], getPopular);
+		useQuery<IGetMoviesResult>(["tvshows", "popular"], getPopularTv);
 	const { data: topRated, isLoading: topRatedLoading } =
-		useQuery<IGetMoviesResult>(["movies", "topRated"], getTopRatedMovie);
-	const { data: upComing, isLoading: upComingLoading } =
-		useQuery<IGetMoviesResult>(["movies", "upComing"], getUpcomingMovie);
+		useQuery<IGetMoviesResult>(["tvshows", "topRated"], getTopRatedTv);
 	return (
 		<Container>
 			{isLoading ? (
 				<Loader>Loading</Loader>
 			) : (
 				<>
-					<Hero data={nowPlaying} />
+					<Hero data={onAir} />
 					<Slider
 						title={"Now Playing"}
-						data={nowPlaying}
+						data={onAir}
 						offset={offset}
 					/>
-					<Modal location="movies" data={nowPlaying} />
+					<Modal location="tvshows" data={onAir} />
 					{!popularLoading ? (
 						<>
 							<Slider
@@ -56,7 +52,7 @@ function Home() {
 								data={popular}
 								offset={offset}
 							/>
-							<Modal location="movies" data={popular} />
+							<Modal location="tvshows" data={popular} />
 						</>
 					) : null}
 					{!topRatedLoading ? (
@@ -66,17 +62,7 @@ function Home() {
 								data={topRated}
 								offset={offset}
 							/>
-							<Modal location="movies" data={topRated} />
-						</>
-					) : null}
-					{!upComingLoading ? (
-						<>
-							<Slider
-								title={"Top Rated"}
-								data={upComing}
-								offset={offset}
-							/>
-							<Modal location="movies" data={upComing} />
+							<Modal location="tvshows" data={topRated} />
 						</>
 					) : null}
 				</>
@@ -85,4 +71,4 @@ function Home() {
 	);
 }
 
-export default Home;
+export default TwShows;
