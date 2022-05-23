@@ -12,12 +12,30 @@ function Router() {
 		<BrowserRouter>
 			<Header />
 			<Routes>
-				<Route path="/*" element={<Home />} />
-				<Route path="/tvshows" element={<Series />} />
-				<Route path="/movies" element={<Movie />} />
-				<Route path="/latest" element={<Latest />} />
-				<Route path="/my-list" element={<MyList />} />
-				<Route path="/search" element={<Search />} />
+				<Route
+					path={`${process.env.PUBLIC_URL}/*`}
+					element={<Home />}
+				/>
+				<Route
+					path={`${process.env.PUBLIC_URL}/tvshows`}
+					element={<Series />}
+				/>
+				<Route
+					path={`${process.env.PUBLIC_URL}/movies`}
+					element={<Movie />}
+				/>
+				<Route
+					path={`${process.env.PUBLIC_URL}/latest`}
+					element={<Latest />}
+				/>
+				<Route
+					path={`${process.env.PUBLIC_URL}/list`}
+					element={<MyList />}
+				/>
+				<Route
+					path={`${process.env.PUBLIC_URL}/search`}
+					element={<Search />}
+				/>
 			</Routes>
 		</BrowserRouter>
 	);
