@@ -8,12 +8,13 @@ import { useQuery } from "react-query";
 import { idToGenre } from "../../utils";
 
 interface ISlider {
+	location: string;
 	title: string;
 	data?: IGetMoviesResult;
 	offset: number;
 }
 
-export default function Slider({ title, data, offset }: ISlider) {
+export default function Slider({ location, title, data, offset }: ISlider) {
 	const navigate = useNavigate();
 	const { data: genres, isLoading } = useQuery<IGetGenres>(
 		["genres"],
@@ -44,7 +45,7 @@ export default function Slider({ title, data, offset }: ISlider) {
 		}
 	};
 	const onBoxClicked = (movidId: number) => {
-		navigate(`/movies/${movidId}`);
+		navigate(`/${location}/${movidId}`);
 	};
 	return (
 		<SliderContainer>

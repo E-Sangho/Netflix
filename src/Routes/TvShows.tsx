@@ -3,6 +3,7 @@ import {
 	getOnAirTv,
 	getPopularTv,
 	getTopRatedTv,
+	IMovie,
 } from "../api";
 import { useQuery } from "react-query";
 import styled from "styled-components";
@@ -32,6 +33,17 @@ function TwShows() {
 		useQuery<IGetMoviesResult>(["tvshows", "popular"], getPopularTv);
 	const { data: topRated, isLoading: topRatedLoading } =
 		useQuery<IGetMoviesResult>(["tvshows", "topRated"], getTopRatedTv);
+	let unique: IMovie[] = [];
+	if (popular && topRated) {
+		const concate = popular.results.concat(topRated.results);
+		unique = concate.filter((item, index) => {
+			return (
+				concate.findIndex((item2, index2) => {
+					return item.id === item2.id;
+				}) === index
+			);
+		});
+	}
 	return (
 		<Container>
 			{isLoading ? (
@@ -40,31 +52,32 @@ function TwShows() {
 				<>
 					<Hero data={onAir} />
 					<Slider
+						location="tvshows"
 						title={"Now Playing"}
 						data={onAir}
 						offset={offset}
 					/>
-					<Modal location="tvshows" data={onAir} />
 					{!popularLoading ? (
 						<>
 							<Slider
+								location="tvshows"
 								title={"Popular"}
 								data={popular}
 								offset={offset}
 							/>
-							<Modal location="tvshows" data={popular} />
 						</>
 					) : null}
 					{!topRatedLoading ? (
 						<>
 							<Slider
+								location="tvshows"
 								title={"Top Rated"}
 								data={topRated}
 								offset={offset}
 							/>
-							<Modal location="tvshows" data={topRated} />
 						</>
 					) : null}
+					<Modal location="tvshows" data={unique} />
 				</>
 			)}
 		</Container>

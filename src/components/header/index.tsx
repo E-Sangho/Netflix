@@ -237,7 +237,7 @@ function HeaderNavigation() {
 		<NavWrapper>
 			<NavLink>
 				<Link
-					to="/"
+					to={`/`}
 					style={{
 						fontWeight: homeMatch ? "bold" : "normal",
 					}}
@@ -247,7 +247,7 @@ function HeaderNavigation() {
 			</NavLink>
 			<NavLink>
 				<Link
-					to="tvshows"
+					to={`/tvshows`}
 					style={{
 						fontWeight: seriesMatch ? "bold" : "normal",
 					}}

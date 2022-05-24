@@ -1,21 +1,15 @@
 import styled from "styled-components";
 import { motion, AnimatePresence, useViewportScroll } from "framer-motion";
 import { useMatch, useNavigate } from "react-router-dom";
-import { IGetMoviesResult } from "../../api";
+import { IMovie } from "../../api";
 import { makeImagePath, idToGenre } from "../../utils";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
-import { IGenres, getGenres, IGetGenres } from "../../api";
+import { getGenres, IGetGenres } from "../../api";
 
 interface IModal {
-	data?: IGetMoviesResult;
+	data?: IMovie[];
 	location: string;
-}
-
-interface Iinfo {
-	data: {
-		genres: IGenres[];
-	};
 }
 
 export default function Modal({ data, location }: IModal) {
@@ -27,12 +21,16 @@ export default function Modal({ data, location }: IModal) {
 	const { scrollY } = useViewportScroll();
 	const navigate = useNavigate();
 	const onOverlayClick = () => {
-		navigate("/");
+		if (location === "tvshows") {
+			navigate(`/tvshows`);
+			return;
+		}
+		navigate(`/`);
 	};
 	const clickedMovie =
 		bigMovieMatch?.params.movieId &&
-		data?.results.find(
-			(movie) => movie.id + "" === bigMovieMatch.params.movieId
+		data?.find(
+			(movie) => String(movie.id) === bigMovieMatch.params.movieId
 		);
 	useEffect(() => {
 		if (bigMovieMatch) {

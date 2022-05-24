@@ -5,6 +5,7 @@ import {
 	getTopRatedMovie,
 	getUpcomingMovie,
 	IGetMoviesResult,
+	IMovie,
 } from "../api";
 import styled from "styled-components";
 import Slider from "../components/slider";
@@ -36,6 +37,19 @@ function Home() {
 		useQuery<IGetMoviesResult>(["movies", "topRated"], getTopRatedMovie);
 	const { data: upComing, isLoading: upComingLoading } =
 		useQuery<IGetMoviesResult>(["movies", "upComing"], getUpcomingMovie);
+	let unique: IMovie[] = [];
+	if (nowPlaying && popular && topRated && upComing) {
+		const concate = nowPlaying.results.concat(
+			popular.results.concat(topRated.results.concat(upComing.results))
+		);
+		unique = concate.filter((item, index) => {
+			return (
+				concate.findIndex((item2, index2) => {
+					return item.id === item2.id;
+				}) === index
+			);
+		});
+	}
 	return (
 		<Container>
 			{isLoading ? (
@@ -44,41 +58,42 @@ function Home() {
 				<>
 					<Hero data={nowPlaying} />
 					<Slider
+						location="movies"
 						title={"Now Playing"}
 						data={nowPlaying}
 						offset={offset}
 					/>
-					<Modal location="movies" data={nowPlaying} />
 					{!popularLoading ? (
 						<>
 							<Slider
+								location="movies"
 								title={"Popular"}
 								data={popular}
 								offset={offset}
 							/>
-							<Modal location="movies" data={popular} />
 						</>
 					) : null}
 					{!topRatedLoading ? (
 						<>
 							<Slider
+								location="movies"
 								title={"Top Rated"}
 								data={topRated}
 								offset={offset}
 							/>
-							<Modal location="movies" data={topRated} />
 						</>
 					) : null}
 					{!upComingLoading ? (
 						<>
 							<Slider
-								title={"Top Rated"}
+								location="movies"
+								title={"Upcoming"}
 								data={upComing}
 								offset={offset}
 							/>
-							<Modal location="movies" data={upComing} />
 						</>
 					) : null}
+					<Modal location="movies" data={unique} />
 				</>
 			)}
 		</Container>

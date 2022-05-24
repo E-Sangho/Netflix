@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
-import { searchMovie, searchTvShows, IGetMoviesResult } from "../api";
+import { searchMovie, searchTvShows, IGetMoviesResult, IMovie } from "../api";
 import Slider from "../components/slider";
 import Modal from "../components/modal";
 import styled from "styled-components";
@@ -25,17 +25,37 @@ function Search() {
 		["movies", "searchTv", keyword],
 		() => searchTvShows(keyword)
 	);
+	let unique: IMovie[] = [];
+	if (movie && tv) {
+		const concate = movie.results.concat(movie.results);
+		unique = concate.filter((item, index) => {
+			return (
+				concate.findIndex((item2, index2) => {
+					return item.id === item2.id;
+				}) === index
+			);
+		});
+	}
 	return (
 		<Container>
 			<>
 				{!isMovieLoading ? (
-					<Slider title={"Movie"} data={movie} offset={offset} />
+					<Slider
+						location="movies"
+						title={"Movie"}
+						data={movie}
+						offset={offset}
+					/>
 				) : null}
-				<Modal location="movies" data={movie} />
 				{!isTvLoading ? (
-					<Slider title={"TvShows"} data={tv} offset={offset} />
+					<Slider
+						location="tvshows"
+						title={"TvShows"}
+						data={tv}
+						offset={offset}
+					/>
 				) : null}
-				<Modal location="tvshows" data={tv} />
+				<Modal location="tvshows" data={unique} />
 			</>
 		</Container>
 	);

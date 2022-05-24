@@ -9,6 +9,7 @@ export const Wrapper = styled(motion.div)`
 	background-color: black;
 	height: 68px;
 	position: fixed;
+	z-index: 999;
 	@media only screen and (max-width: 1023px) {
 		height: 41px;
 	}
